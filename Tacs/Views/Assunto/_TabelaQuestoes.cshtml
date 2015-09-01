@@ -1,0 +1,41 @@
+﻿@model Tacs.ViewModels.Assunto.VMAssunto
+
+<div class="table-responsive">
+    <table class="table table-striped table_tacs">
+        <thead>
+            <tr>
+                <td>Descrição</td>
+                <td>Dificuldade</td>
+                <td>Informação</td>
+                <td>Acerto Casual</td>
+                <td>Ações</td>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Questoes.Count == 0)
+            {
+                <tr>
+                    <td>Nenhuma questão cadastrada</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            }
+            else
+            {
+                foreach (var q in Model.Questoes)
+                {
+                    <tr>
+                        <td>@q.Descricao</td>
+                        <td>@q.Dificuldade</td>
+                        <td>@q.Informacao</td>
+                        <td>@q.AcertoCasual</td>
+                        <td>@Html.ActionLink("Editar", "Edit", new { controller = "Questao", id = q.Id })</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+

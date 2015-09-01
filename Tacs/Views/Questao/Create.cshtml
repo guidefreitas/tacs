@@ -1,0 +1,13 @@
+﻿@model Tacs.ViewModels.Questao.VMQuestao
+@{
+    ViewBag.Title = "Criando nova questão";
+}
+
+<div class="row-fluid">
+    <div class="span12">
+        @using (Html.BeginForm())
+        {
+            @Html.Partial("_Form", Model)
+        }
+    </div>
+</div>

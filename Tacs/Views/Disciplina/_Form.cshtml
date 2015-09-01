@@ -1,0 +1,41 @@
+﻿@model Tacs.ViewModels.Disciplina.VMDisciplina
+
+<div class="panel">
+    <div class="panel-heading">
+        <h3 class="panel-title">Disciplina</h3>
+    </div>
+
+    <div class="panel-body">
+        @Html.AntiForgeryToken()
+        <div class="row">
+            <div class="col-sm-5">
+                @Html.TacsTextBoxFor(model => model.Nome)
+            </div>
+        </div>
+
+        @if (Model.Id != 0)
+        {
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3>Alunos</h3>
+                    @Html.ActionLink("Adicionar aluno", "AddAluno", new { id = Model.Id }, new { @class = "btn btn-info" })
+                    <br />
+                    <br />
+                    @Html.Partial("_EditTableAlunos", Model)
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="panel-footer">
+        @Html.TacsSubmitButton("Salvar", new { @class = "btn btn-success" })
+        @if (Model.Id != 0)
+        {
+            <button name="X-HTTP-Method-Override" value="DELETE" formnovalidate
+                    class="btn btn-danger" onclick="return confirm('Tem certeza que deseja apagar?')">
+                Apagar
+            </button>
+        }
+        @Html.ActionLink("Voltar", "Index", null, new { @class = "btn btn-default" })
+    </div>
+</div>

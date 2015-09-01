@@ -1,0 +1,51 @@
+﻿@model Tacs.ViewModels.Assunto.VMIndexAssunto
+@{
+    ViewBag.Title = "Assuntos";
+}
+
+<div class="row-fluid">
+    <div class="span12">
+        <h1>Assuntos</h1>
+        <div class="row">
+            <div class="col-md-12">
+                @Html.ActionLink("Adicionar assunto", "Create", null, new { @class = "btn btn-info" })
+                <br />
+                <br />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table class="table table-striped table_tacs">
+                        <thead>
+                            <tr>
+                                <td>Assunto</td>
+                                <td>Ações</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Assuntos.Count == 0)
+                            {
+                                <tr>
+                                    <td>Nenhum assunto cadastrado</td>
+                                    <td></td>
+                                </tr>
+                            }
+                            else
+                            {
+                                foreach (var m in Model.Assuntos)
+                                {
+                                    <tr>
+                                        <td>@m.Titulo</td>
+                                        <td>@Html.ActionLink("Editar", "Edit", new { id = m.Id })</td>
+                                    </tr>
+                                }
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+              </div>
+         </div>
+    </div>
+</div>

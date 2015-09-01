@@ -1,0 +1,14 @@
+﻿@model Tacs.ViewModels.Alternativa.VMAlternativa
+
+@{
+    ViewBag.Title = "Editar alternativa";
+}
+
+<div class="row-fluid">
+    <div class="span12">
+        @using (Html.BeginForm("Edit", "Alternativa"))
+        {
+            @Html.Partial("_Form", Model)
+        }
+    </div>
+</div>

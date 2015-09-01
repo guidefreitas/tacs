@@ -1,0 +1,14 @@
+﻿@model Tacs.ViewModels.Assunto.VMAssunto
+
+@{
+    ViewBag.Title = "Editando assunto";
+}
+
+<div class="row-fluid">
+    <div class="span12">
+        @using (Html.BeginForm("Edit", "Assunto"))
+        {
+            @Html.Partial("_Form", Model)
+        }
+    </div>
+</div>

@@ -1,0 +1,36 @@
+﻿@model Tacs.ViewModels.Alternativa.VMAlternativa
+
+<div class="panel">
+    <div class="panel-heading">
+        <h3 class="panel-title">Alternativa</h3>
+    </div>
+
+    <div class="panel-body">
+        @Html.AntiForgeryToken()
+        <div class="row">
+            <div class="col-sm-12">
+                @Html.TacsTextAreaFor(model => model.Descricao)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-5">
+                @Html.TacsCheckboxFor(model => model.Correta)
+            </div>
+        </div>
+
+        
+    </div>
+
+    <div class="panel-footer">
+        @Html.TacsSubmitButton("Salvar", new { @class = "btn btn-success" })
+        @if (Model.Id != 0)
+        {
+            <button name="X-HTTP-Method-Override" value="DELETE" formnovalidate
+                    class="btn btn-danger" onclick="return confirm('Tem certeza que deseja apagar?')">
+                Apagar
+            </button>
+        }
+        @Html.ActionLink("Voltar", "Edit", new { controller = "Questao", id = Model.QuestaoId }, new { @class = "btn btn-default" })
+    </div>
+</div>

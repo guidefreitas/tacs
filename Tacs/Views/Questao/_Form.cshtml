@@ -1,0 +1,60 @@
+﻿@model Tacs.ViewModels.Questao.VMQuestao
+
+<div class="panel">
+    <div class="panel-heading">
+        <h1 class="panel-title">Questão</h1>
+    </div>
+
+    <div class="panel-body">
+        @Html.AntiForgeryToken()
+        <div class="row">
+            <div class="col-sm-12">
+                @Html.TacsTextAreaFor(model => model.Descricao)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                @Html.TacsTextBoxFor(model => model.Dificuldade)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                @Html.TacsTextBoxFor(model => model.Informacao)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                @Html.TacsTextBoxFor(model => model.AcertoCasual)
+            </div>
+        </div>
+
+        @if (Model.Id != 0)
+        {
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3>Alternativas</h3>
+                    @Html.ActionLink("Adicionar alternativa", "Create", new { controller = "Alternativa", questaoId = Model.Id }, new { @class = "btn btn-info" })
+                    <br />
+                    <br />
+                    @Html.Partial("_TabelaAlternativas", Model)
+                </div>
+            </div>
+        }
+        
+    </div>
+    <div class="panel-footer">
+        @Html.TacsSubmitButton("Salvar", new { @class = "btn btn-success" })
+        @if (Model.Id != 0)
+        {
+            <button name="X-HTTP-Method-Override" value="DELETE" formnovalidate
+                    class="btn btn-danger" onclick="return confirm('Tem certeza que deseja apagar?')">
+                Apagar
+            </button>
+        }
+        @Html.ActionLink("Voltar", "Edit", new { controller = "Assunto", id = Model.AssuntoId }, new { @class = "btn btn-default" })
+    </div>
+</div>
+

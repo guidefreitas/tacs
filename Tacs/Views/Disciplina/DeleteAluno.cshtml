@@ -1,0 +1,33 @@
+﻿@model Tacs.ViewModels.Disciplina.VMDeleteAluno
+
+@{
+    ViewBag.Title = "Removendo aluno";
+}
+
+<div class="row-fluid">
+    <div class="span12">
+        @using (Html.BeginForm("DeleteAluno"))
+        {
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Remover aluno</h3>
+                </div>
+
+                <div class="panel-body">
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(m => m.AlunoId)
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <p>Tem certeza que deseja remover o aluno desta turma?</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-footer">
+                    @Html.TacsSubmitButton("Remover", new { @class = "btn btn-danger" })
+                    @Html.ActionLink("Voltar", "Edit", new { id = Model.DisciplinaId }, new { @class = "btn btn-default" })
+                </div>
+            </div>
+        }
+    </div>
+</div>

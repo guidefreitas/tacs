@@ -1,0 +1,44 @@
+﻿@model Tacs.ViewModels.Questao.VMQuestao
+
+<div class="table-responsive">
+    <table class="table table-striped table_tacs">
+        <thead>
+            <tr>
+                <td>Descrição</td>
+                <td>Correta?</td>
+                <td>Ações</td>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Alternativas.Count == 0)
+            {
+                <tr>
+                    <td>Nenhuma alternativa cadastrada</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            }
+            else
+            {
+                foreach (var q in Model.Alternativas)
+                {
+                    <tr>
+                        <td>@q.Descricao</td>
+                        @if (q.Correta)
+                        {
+                            <td><b>SIM</b></td>
+                        }
+                        else
+                        {
+                            <td>NÃO</td>
+                        }
+
+                        <td>@Html.ActionLink("Editar", "Edit", new { controller = "Alternativa", id = q.Id })</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+

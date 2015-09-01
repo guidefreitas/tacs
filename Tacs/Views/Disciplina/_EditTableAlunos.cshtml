@@ -1,0 +1,36 @@
+﻿@model Tacs.ViewModels.Disciplina.VMDisciplina
+
+<div class="table-responsive">
+    <table class="table table-striped table_tacs">
+        <thead>
+            <tr>
+                <td>Nome</td>
+                <td>Email</td>
+                <td>Ações</td>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Alunos.Count == 0)
+            {
+                <tr>
+                    <td>Nenhum aluno cadastrado</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            }
+            else
+            {
+                foreach (var aluno in Model.Alunos)
+                {
+                    <tr>
+                        <td>@aluno.Nome</td>
+                        <td>@aluno.Email</td>
+                        <td>@Html.ActionLink("Remover", "DeleteAluno", new { id = Model.Id, alunoId = aluno.Id })</td>
+                    </tr>
+                }
+
+            }
+        </tbody>
+        
+    </table>
+</div>

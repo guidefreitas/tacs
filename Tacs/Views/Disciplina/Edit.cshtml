@@ -1,0 +1,15 @@
+﻿@model Tacs.ViewModels.Disciplina.VMDisciplina
+
+@{
+    ViewBag.Title = "Editando disciplina";
+}
+
+<div class="row-fluid">
+    <div class="span12">
+        <h1>Disciplina</h1>
+        @using (Html.BeginForm("Edit", "Disciplina"))
+        {
+            @Html.Partial("_Form", Model)
+        }
+    </div>
+</div>
