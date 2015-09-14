@@ -13,7 +13,7 @@ namespace Tacs.Domain.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201508252026163_Init"; }
+            get { return "201509141919204_Init"; }
         }
         
         string IMigrationMetadata.Source

@@ -150,4 +150,25 @@
   <data name="TelaQuestaoFatorInformação" xml:space="preserve">
     <value>Informação</value>
   </data>
+  <data name="TelaTesteAddAssunto" xml:space="preserve">
+    <value>Assunto</value>
+  </data>
+  <data name="TelaTesteCriterioEscolhaQuestao" xml:space="preserve">
+    <value>Critério de escolha de questões</value>
+  </data>
+  <data name="TelaTesteCriterioFinalizacao" xml:space="preserve">
+    <value>Critério de finalização do teste</value>
+  </data>
+  <data name="TelaTesteCriterioInicio" xml:space="preserve">
+    <value>Critério de inicialização</value>
+  </data>
+  <data name="TelaTesteDataFimValidade" xml:space="preserve">
+    <value>Data final de validade</value>
+  </data>
+  <data name="TelaTesteDataInicioValidade" xml:space="preserve">
+    <value>Data de Início</value>
+  </data>
+  <data name="TelaTesteDisciplina" xml:space="preserve">
+    <value>Disciplina</value>
+  </data>
 </root>

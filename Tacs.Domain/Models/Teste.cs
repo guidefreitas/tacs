@@ -9,7 +9,7 @@ namespace Tacs.Domain.Models
 {
     public class Teste : BaseModel
     {
-        public virtual ICollection<Disciplina> Assuntos { get; set; }
+        public virtual ICollection<Assunto> Assuntos { get; set; }
 
         [Required]
         public DateTime DataInicioValidade { get; set; }

@@ -8,5 +8,7 @@ namespace Tacs.Domain.Models
 {
     public enum CriterioFinalizacao
     {
+        ParaNaQuestao30,
+        AoNivelarConhecimento
     }
 }

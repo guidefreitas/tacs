@@ -1,0 +1,39 @@
+﻿@model Tacs.ViewModels.Teste.VMCreateEditTeste
+
+<div class="table-responsive">
+    <table class="table table-striped table_tacs">
+        <thead>
+            <tr>
+                <td>Titulo</td>
+                <td>Ações</td>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Assuntos.Count == 0)
+            {
+                <tr>
+                    <td>Nenhuma assunto cadastrado</td>
+                    <td></td>
+                </tr>
+            }
+            else
+            {
+                foreach (var q in Model.Assuntos)
+                {
+                    <tr>
+                        <td>@q.Titulo</td>
+                        <td>@Ajax.ActionLink("Remover", "RemoveAssunto", new { id = Model.Id, assuntoId = q.Id }, 
+                           new AjaxOptions
+                                {
+                                    UpdateTargetId = "table_assuntos",
+                                    InsertionMode = InsertionMode.Replace,
+                                    HttpMethod = "Post"
+                                })
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+

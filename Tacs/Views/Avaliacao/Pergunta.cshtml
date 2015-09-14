@@ -1,0 +1,29 @@
+﻿@model Tacs.ViewModels.Pergunta.VMQuestao
+
+<div class="row-fluid">
+    <div class="span12">
+        @using (Html.BeginForm("Pergunta", "Avaliacao"))
+        {
+            <h2>@Model.Descricao</h2>
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.DataInicioQuestao)
+            @Html.HiddenFor(model => model.PerguntaId)
+            
+            <table class="table table-bordered" >
+                <tbody>
+                    @foreach (var alternativa in Model.Alternativas)
+                    {
+                        <tr>
+                            <td width="50px"><input type="radio" name="resposta" value="@alternativa.Id" /></td>
+                            <td>@alternativa.Descricao</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            
+            <br />
+            @Html.TacsSubmitButton("Responder", new { @class = "btn btn-success" });
+        }
+    </div>
+</div>
+

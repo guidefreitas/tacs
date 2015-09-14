@@ -50,7 +50,21 @@ namespace Tacs.Helpers
             TagBuilder div = new TagBuilder("div");
             div.AddCssClass("date");
             div.AddCssClass("input-group");
-            var dropDown = System.Web.Mvc.Html.InputExtensions.TextBoxFor(html, expression, new { @class = "form-control date-filter", rows = "10" });
+            //var dateField = System.Web.Mvc.Html.InputExtensions.TextBoxFor(html, expression, new { type="text", @class = "form-control date-filter" });
+            //String dateField = "<input data-format=\"dd/MM/yyyy hh:mm\" type=\"text\"></input>";
+            TagBuilder datefield = new TagBuilder("input");
+            datefield.Attributes.Add("data-format", "dd/MM/yyyy hh:mm");
+            datefield.Attributes.Add("type", "text");
+
+            MemberExpression memberExp = (MemberExpression)expression.Body;
+            var objectMember = Expression.Convert(memberExp, typeof(object));
+
+            var getterLambda = Expression.Lambda<Func<object>>(objectMember);
+
+            var getter = getterLambda.Compile();
+
+            String fieldValue = (String) getter.DynamicInvoke();
+            datefield.InnerHtml = fieldValue;
 
             TagBuilder span = new TagBuilder("span");
             span.AddCssClass("input-group-addon");
@@ -62,7 +76,7 @@ namespace Tacs.Helpers
 
             span.InnerHtml = i.ToString();
 
-            div.InnerHtml += dropDown.ToHtmlString() + span.ToString();
+            div.InnerHtml += datefield.ToString() + span.ToString();
             TagBuilder small = new TagBuilder("small");
             small.AddCssClass("help-block");
             var validationMessage = System.Web.Mvc.Html.ValidationExtensions.ValidationMessageFor(html, expression);

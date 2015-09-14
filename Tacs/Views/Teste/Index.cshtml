@@ -1,0 +1,69 @@
+﻿@model Tacs.ViewModels.Teste.VMIndexTeste
+@{
+    ViewBag.Title = "Testes";
+}
+
+<div class="row-fluid">
+    <div class="span12">
+        <h1>Testes</h1>
+        <div class="row">
+            <div class="col-md-12">
+                @Html.ActionLink("Adicionar novo teste", "Create", null, new { @class = "btn btn-info" })
+                <br />
+                <br />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table class="table table-striped table_tacs">
+                        <thead>
+                            <tr>
+                                <td>Disciplina</td>
+                                <td>Assuntos</td>
+                                <td>Data início</td>
+                                <td>Data fim</td>
+                                <td>Critério início</td>
+                                <td>Critério parada</td>
+                                <td>Critério escolha de questões</td>
+                                <td>Ações</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Testes.Count == 0)
+                            {
+                                <tr>
+                                    <td>Nenhum teste cadastrado</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            }
+                            else
+                            {
+                                foreach (var m in Model.Testes)
+                                {
+                                    <tr>
+                                        <td>@m.DisciplinaNome</td>
+                                        <td>@String.Join(", ", m.Assuntos.ToArray())</td>
+                                        <td>@m.DataInicioValidade</td>
+                                        <td>@m.DataFimValidade</td>
+                                        <td>@m.CriterioInicio</td>
+                                        <td>@m.CriterioFinalizacao</td>
+                                        <td>@m.CriterioEscolhaQuestao</td>
+                                        <td>@Html.ActionLink("Editar", "Edit", new { id = m.Id })</td>
+                                    </tr>
+                                }
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+              </div>
+         </div>
+    </div>
+</div>

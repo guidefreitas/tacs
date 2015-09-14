@@ -21,6 +21,6 @@ namespace Tacs.Domain.Models
         [Required]
         public Alternativa Resposta { get; set; }
         
-        public DateTime? TempoResposta { get; set; }
+        public TimeSpan? TempoResposta { get; set; }
     }
 }

@@ -10,12 +10,15 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Tacs.Domain.Models;
+using Tacs.Domain;
 
 namespace IdentitySample.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
+        TacsContext db = new TacsContext();
+
         public AccountController()
         {
         }
@@ -77,6 +80,11 @@ namespace IdentitySample.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
+                    var user = db.Users.Where(p => p.Email == model.Email).FirstOrDefault();
+                    if(user.isInRole("Aluno"))
+                    {
+                        return RedirectToAction("Index", "Avaliacao");
+                    }
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -387,8 +395,10 @@ namespace IdentitySample.Controllers
         {
             var clientKey = Request.Browser.Type;
             var user = UserManager.FindById(User.Identity.GetUserId());
-            //await UserManager.SignOutClientAsync(user, clientKey);
-            AuthenticationManager.SignOut();
+            //UserManager.SignOutClientAsync(user, clientKey);
+            var authTypes = AuthenticationManager.GetAuthenticationTypes();
+            AuthenticationManager.SignOut("ApplicationCookie");
+
             return RedirectToAction("Index", "Home");
         }
 

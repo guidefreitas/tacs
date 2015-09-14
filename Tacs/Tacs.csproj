@@ -44,6 +44,26 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Glimpse.Ado, Version=1.7.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Glimpse.Ado.1.7.3\lib\net45\Glimpse.Ado.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Glimpse.AspNet, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Glimpse.AspNet.1.8.0\lib\net45\Glimpse.AspNet.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Glimpse.Core, Version=1.8.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Glimpse.1.8.6\lib\net45\Glimpse.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Glimpse.EF6, Version=1.6.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Glimpse.EF6.1.6.5\lib\net45\Glimpse.EF6.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Glimpse.Mvc5, Version=1.5.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Glimpse.Mvc5.1.5.3\lib\net45\Glimpse.Mvc5.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
@@ -170,13 +190,17 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AlternativaController.cs" />
+    <Compile Include="Controllers\AvaliacaoController.cs" />
+    <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\QuestaoController.cs" />
     <Compile Include="Controllers\DisciplinaController.cs" />
     <Compile Include="Controllers\AssuntoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\RolesAdminController.cs" />
+    <Compile Include="Controllers\TesteController.cs" />
     <Compile Include="Controllers\UserAdminController.cs" />
+    <Compile Include="GlimpseSecurityPolicy.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -189,33 +213,47 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\Alternativa\VMAlternativa.cs" />
+    <Compile Include="ViewModels\Avaliacao\VMAlternativa.cs" />
+    <Compile Include="ViewModels\Avaliacao\VMAvaliacao.cs" />
+    <Compile Include="ViewModels\Avaliacao\VMAvaliacaoPergunta.cs" />
+    <Compile Include="ViewModels\Avaliacao\VMIndexAvaliacao.cs" />
     <Compile Include="ViewModels\Disciplina\VMAddAluno.cs" />
     <Compile Include="ViewModels\Disciplina\VMAluno.cs" />
     <Compile Include="ViewModels\Disciplina\VMDeleteAluno.cs" />
+    <Compile Include="ViewModels\Pergunta\VMAlternativa.cs" />
+    <Compile Include="ViewModels\Pergunta\VMQuestao.cs" />
     <Compile Include="ViewModels\Questao\VMAlternativa.cs" />
     <Compile Include="ViewModels\Questao\VMQuestao.cs" />
     <Compile Include="ViewModels\Disciplina\VMDisciplina.cs" />
     <Compile Include="ViewModels\Disciplina\VMIndexDisciplina.cs" />
     <Compile Include="ViewModels\Assunto\VMAssunto.cs" />
     <Compile Include="ViewModels\Assunto\VMIndexAssunto.cs" />
+    <Compile Include="ViewModels\Teste\VMAddAssunto.cs" />
+    <Compile Include="ViewModels\Teste\VMAssunto.cs" />
+    <Compile Include="ViewModels\Teste\VMCreateEditTeste.cs" />
+    <Compile Include="ViewModels\Teste\VMDisciplina.cs" />
+    <Compile Include="ViewModels\Teste\VMIndexTeste.cs" />
+    <Compile Include="ViewModels\Teste\VMTeste.cs" />
+    <Compile Include="ViewModels\Teste\VMTesteItem.cs" />
     <Compile Include="ViewModels\VMIndexBase.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\datatables.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Readme.txt" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\datatables.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -287,6 +325,18 @@
     <Content Include="Views\Alternativa\_Form.cshtml" />
     <Content Include="Views\Alternativa\Create.cshtml" />
     <Content Include="Views\Alternativa\Edit.cshtml" />
+    <Content Include="Views\Teste\Index.cshtml" />
+    <Content Include="Views\Teste\_Form.cshtml" />
+    <Content Include="Views\Teste\Create.cshtml" />
+    <Content Include="Views\Teste\Edit.cshtml" />
+    <Content Include="Views\Teste\_TabelaItens.cshtml" />
+    <Content Include="Views\Avaliacao\Index.cshtml" />
+    <Content Include="Views\Avaliacao\NaoAluno.cshtml" />
+    <Content Include="Views\Teste\AddAssunto.cshtml" />
+    <Content Include="Views\Teste\_TabelaAssuntos.cshtml" />
+    <Content Include="Views\Avaliacao\Pergunta.cshtml" />
+    <Content Include="Views\Avaliacao\Concluido.cshtml" />
+    <Content Include="Views\Dashboard\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,45 @@
+﻿@model Tacs.ViewModels.Avaliacao.VMIndexAvaliacao
+@{
+    ViewBag.Title = "Avaliações";
+}
+
+
+<div class="row-fluid">
+    <div class="span12">
+        
+        @if (Model.Avaliacoes.Count == 0)
+        {
+            <h2>Nenhuma avaliação disponível no momento.</h2>
+        }
+        else
+        {
+            <h1>Avaliações Disponíveis</h1>
+            <p>Selecione uma avaliação para começar</p>
+
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <td>Disciplina</td>
+                            <td>Publicação</td>
+                            <td>Data limite</td>
+                            <td>Ação</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var avaliacao in Model.Avaliacoes)
+                        {
+                            <tr>
+                                <td>@avaliacao.DisciplinaNome</td>
+                                <td>@avaliacao.DataInicio</td>
+                                <td>@avaliacao.DataFim</td>
+                                <td>@Html.ActionLink("Começar agora", "Pergunta", new { id = avaliacao.Id }, new { @class = "btn btn-success" })</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        
+    </div>
+</div>

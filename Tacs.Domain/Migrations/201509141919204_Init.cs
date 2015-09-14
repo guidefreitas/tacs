@@ -55,13 +55,10 @@ namespace Tacs.Domain.Migrations
                         CriterioFinalizacao = c.Int(nullable: false),
                         CriterioEscolhaQuestao = c.Int(nullable: false),
                         Disciplina_Id = c.Long(nullable: false),
-                        Assunto_Id = c.Long(),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Disciplina", t => t.Disciplina_Id)
-                .ForeignKey("dbo.Assunto", t => t.Assunto_Id)
-                .Index(t => t.Disciplina_Id)
-                .Index(t => t.Assunto_Id);
+                .Index(t => t.Disciplina_Id);
             
             CreateTable(
                 "dbo.Disciplina",
@@ -69,11 +66,8 @@ namespace Tacs.Domain.Migrations
                     {
                         Id = c.Long(nullable: false, identity: true),
                         Nome = c.String(nullable: false, maxLength: 200, unicode: false),
-                        Teste_Id = c.Long(),
                     })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Teste", t => t.Teste_Id)
-                .Index(t => t.Teste_Id);
+                .PrimaryKey(t => t.Id);
             
             CreateTable(
                 "dbo.ApplicationUser",
@@ -81,7 +75,6 @@ namespace Tacs.Domain.Migrations
                     {
                         Id = c.String(nullable: false, maxLength: 200, unicode: false),
                         Matricula = c.String(maxLength: 200, unicode: false),
-                        TipoUsuario = c.Int(nullable: false),
                         Email = c.String(maxLength: 200, unicode: false),
                         EmailConfirmed = c.Boolean(nullable: false),
                         PasswordHash = c.String(maxLength: 200, unicode: false),
@@ -143,7 +136,7 @@ namespace Tacs.Domain.Migrations
                 c => new
                     {
                         Id = c.Long(nullable: false, identity: true),
-                        TempoResposta = c.DateTime(),
+                        TempoResposta = c.Time(precision: 7),
                         Questao_Id = c.Long(nullable: false),
                         Resposta_Id = c.Long(nullable: false),
                         Teste_Id = c.Long(nullable: false),
@@ -169,6 +162,19 @@ namespace Tacs.Domain.Migrations
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
+                "dbo.TesteAssunto",
+                c => new
+                    {
+                        Teste_Id = c.Long(nullable: false),
+                        Assunto_Id = c.Long(nullable: false),
+                    })
+                .PrimaryKey(t => new { t.Teste_Id, t.Assunto_Id })
+                .ForeignKey("dbo.Teste", t => t.Teste_Id)
+                .ForeignKey("dbo.Assunto", t => t.Assunto_Id)
+                .Index(t => t.Teste_Id)
+                .Index(t => t.Assunto_Id);
+            
+            CreateTable(
                 "dbo.ApplicationUserDisciplina",
                 c => new
                     {
@@ -188,20 +194,22 @@ namespace Tacs.Domain.Migrations
             DropForeignKey("dbo.IdentityUserRole", "IdentityRole_Id", "dbo.IdentityRole");
             DropForeignKey("dbo.Alternativa", "Questao_Id", "dbo.Questao");
             DropForeignKey("dbo.Questao", "Assunto_Id", "dbo.Assunto");
-            DropForeignKey("dbo.Teste", "Assunto_Id", "dbo.Assunto");
             DropForeignKey("dbo.TesteItem", "Usuario_Id", "dbo.ApplicationUser");
             DropForeignKey("dbo.TesteItem", "Teste_Id", "dbo.Teste");
             DropForeignKey("dbo.TesteItem", "Resposta_Id", "dbo.Alternativa");
             DropForeignKey("dbo.TesteItem", "Questao_Id", "dbo.Questao");
             DropForeignKey("dbo.Teste", "Disciplina_Id", "dbo.Disciplina");
-            DropForeignKey("dbo.Disciplina", "Teste_Id", "dbo.Teste");
             DropForeignKey("dbo.IdentityUserRole", "ApplicationUser_Id", "dbo.ApplicationUser");
             DropForeignKey("dbo.IdentityUserLogin", "ApplicationUser_Id", "dbo.ApplicationUser");
             DropForeignKey("dbo.ApplicationUserDisciplina", "Disciplina_Id", "dbo.Disciplina");
             DropForeignKey("dbo.ApplicationUserDisciplina", "ApplicationUser_Id", "dbo.ApplicationUser");
             DropForeignKey("dbo.IdentityUserClaim", "ApplicationUser_Id", "dbo.ApplicationUser");
+            DropForeignKey("dbo.TesteAssunto", "Assunto_Id", "dbo.Assunto");
+            DropForeignKey("dbo.TesteAssunto", "Teste_Id", "dbo.Teste");
             DropIndex("dbo.ApplicationUserDisciplina", new[] { "Disciplina_Id" });
             DropIndex("dbo.ApplicationUserDisciplina", new[] { "ApplicationUser_Id" });
+            DropIndex("dbo.TesteAssunto", new[] { "Assunto_Id" });
+            DropIndex("dbo.TesteAssunto", new[] { "Teste_Id" });
             DropIndex("dbo.TesteItem", new[] { "Usuario_Id" });
             DropIndex("dbo.TesteItem", new[] { "Teste_Id" });
             DropIndex("dbo.TesteItem", new[] { "Resposta_Id" });
@@ -210,12 +218,11 @@ namespace Tacs.Domain.Migrations
             DropIndex("dbo.IdentityUserRole", new[] { "ApplicationUser_Id" });
             DropIndex("dbo.IdentityUserLogin", new[] { "ApplicationUser_Id" });
             DropIndex("dbo.IdentityUserClaim", new[] { "ApplicationUser_Id" });
-            DropIndex("dbo.Disciplina", new[] { "Teste_Id" });
-            DropIndex("dbo.Teste", new[] { "Assunto_Id" });
             DropIndex("dbo.Teste", new[] { "Disciplina_Id" });
             DropIndex("dbo.Questao", new[] { "Assunto_Id" });
             DropIndex("dbo.Alternativa", new[] { "Questao_Id" });
             DropTable("dbo.ApplicationUserDisciplina");
+            DropTable("dbo.TesteAssunto");
             DropTable("dbo.IdentityRole");
             DropTable("dbo.TesteItem");
             DropTable("dbo.IdentityUserRole");

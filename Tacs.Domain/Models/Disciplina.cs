@@ -14,5 +14,7 @@ namespace Tacs.Domain.Models
         public String Nome { get; set; }
 
         public virtual ICollection<ApplicationUser> Alunos { get; set; }
+
+        public virtual ICollection<Teste> Testes { get; set; }
     }
 }

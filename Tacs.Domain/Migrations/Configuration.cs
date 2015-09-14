@@ -4,6 +4,7 @@ namespace Tacs.Domain.Migrations
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
+    using Models;
 
     internal sealed class Configuration : DbMigrationsConfiguration<Tacs.Domain.TacsContext>
     {
@@ -47,7 +48,44 @@ namespace Tacs.Domain.Migrations
                 UserId = userAdmin.Id
             });
 
+            var roleAluno = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
+            roleAluno.Name = "Aluno";
+            context.Roles.Add(roleAluno);
             context.SaveChanges();
+
+
+            var roleProfessor = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
+            roleProfessor.Name = "Professor";
+            context.Roles.Add(roleProfessor);
+            context.SaveChanges();
+
+
+            for(int i = 0; i < 10; i++)
+            {
+                var assunto = new Assunto();
+                assunto.Titulo = "Assunto exemplo " + i;
+                context.Assuntos.Add(assunto);
+                context.SaveChanges();
+
+                for (int j = 0; j < 10; j++)
+                {
+                    var questao = new Questao();
+                    questao.Assunto = assunto;
+                    questao.Descricao = "Exemplo de questão " + j;
+                    context.Questoes.Add(questao);
+                    context.SaveChanges();
+
+                    for(int m = 1; m <= 5; m++)
+                    {
+                        var alternavia = new Alternativa();
+                        alternavia.Descricao = "Alternativa " + m;
+                        alternavia.Questao = questao;
+                        context.Alternativas.Add(alternavia);
+                        context.SaveChanges();
+                    }
+                }
+            }
+            
         }
     }
 }

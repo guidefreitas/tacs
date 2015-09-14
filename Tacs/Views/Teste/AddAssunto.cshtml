@@ -1,0 +1,33 @@
+﻿@model Tacs.ViewModels.Teste.VMAddAssunto
+
+@{
+    ViewBag.Title = "Adicionar assunto";
+}
+
+<div class="row-fluid">
+    <div class="span12">
+        @using (Html.BeginForm("AddAssunto"))
+        {
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Adicionar assunto</h3>
+                </div>
+
+                <div class="panel-body">
+                    @Html.AntiForgeryToken()
+                    <div class="row">
+                        <div class="col-sm-5">
+                            @Html.TacsDropDownListFor(model => model.AssuntoId, new SelectList(Model.Assuntos, "Id", "Titulo", Model.AssuntoId), i18n.T("GeralSelecioneOpcao"))
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-footer">
+                    @Html.TacsSubmitButton("Adicionar", new { @class = "btn btn-success" })
+                    @Html.ActionLink("Voltar", "Edit", new { id = Model.TesteId }, new { @class = "btn btn-default" })
+                </div>
+            </div>
+        }
+    </div>
+</div>
+

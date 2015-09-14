@@ -91,7 +91,7 @@ namespace IdentitySample.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = userViewModel.Email, Email = userViewModel.Email, TipoUsuario = userViewModel.TipoUsuario };
+                var user = new ApplicationUser { UserName = userViewModel.Email, Email = userViewModel.Email };
                 var adminresult = await UserManager.CreateAsync(user, userViewModel.Password);
 
                 //Add User to the selected Roles 
@@ -141,7 +141,6 @@ namespace IdentitySample.Controllers
             {
                 Id = user.Id,
                 Email = user.Email,
-                TipoUsuario = user.TipoUsuario,
                 RolesList = RoleManager.Roles.ToList().Select(x => new SelectListItem()
                 {
                     Selected = userRoles.Contains(x.Name),
@@ -167,7 +166,6 @@ namespace IdentitySample.Controllers
 
                 user.UserName = editUser.Email;
                 user.Email = editUser.Email;
-                user.TipoUsuario = editUser.TipoUsuario;
 
                 var userRoles = await UserManager.GetRolesAsync(user.Id);
 

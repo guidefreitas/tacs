@@ -9,5 +9,6 @@ namespace Tacs.Domain.Models
 {
     public enum CriterioEscolhaQuestao
     {
+        Aleatoria
     }
 }

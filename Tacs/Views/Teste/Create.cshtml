@@ -1,0 +1,13 @@
+﻿@model Tacs.ViewModels.Teste.VMCreateEditTeste
+@{
+    ViewBag.Title = "Criando novo teste";
+}
+
+<div class="row-fluid">
+    <div class="span12">
+        @using (Html.BeginForm())
+        {
+            @Html.Partial("_Form", Model)
+        }
+    </div>
+</div>

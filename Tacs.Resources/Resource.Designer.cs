@@ -158,5 +158,68 @@ namespace Tacs.Resources {
                 return ResourceManager.GetString("TelaQuestaoFatorInformação", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assunto.
+        /// </summary>
+        public static string TelaTesteAddAssunto {
+            get {
+                return ResourceManager.GetString("TelaTesteAddAssunto", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Critério de escolha de questões.
+        /// </summary>
+        public static string TelaTesteCriterioEscolhaQuestao {
+            get {
+                return ResourceManager.GetString("TelaTesteCriterioEscolhaQuestao", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Critério de finalização do teste.
+        /// </summary>
+        public static string TelaTesteCriterioFinalizacao {
+            get {
+                return ResourceManager.GetString("TelaTesteCriterioFinalizacao", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Critério de inicialização.
+        /// </summary>
+        public static string TelaTesteCriterioInicio {
+            get {
+                return ResourceManager.GetString("TelaTesteCriterioInicio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data final de validade.
+        /// </summary>
+        public static string TelaTesteDataFimValidade {
+            get {
+                return ResourceManager.GetString("TelaTesteDataFimValidade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data de Início.
+        /// </summary>
+        public static string TelaTesteDataInicioValidade {
+            get {
+                return ResourceManager.GetString("TelaTesteDataInicioValidade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disciplina.
+        /// </summary>
+        public static string TelaTesteDisciplina {
+            get {
+                return ResourceManager.GetString("TelaTesteDisciplina", resourceCulture);
+            }
+        }
     }
 }

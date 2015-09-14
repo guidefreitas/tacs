@@ -24,8 +24,5 @@ namespace IdentitySample.Models
         public string Email { get; set; }
 
         public IEnumerable<SelectListItem> RolesList { get; set; }
-
-        [LocalizedDisplayName("TelaCreateTipoUsuario")]
-        public TipoUsuario TipoUsuario { get; set; }
     }
 }

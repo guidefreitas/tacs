@@ -21,13 +21,23 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    @if (Request.IsAuthenticated && User.IsInRole("Admin"))
+                    @if (Request.IsAuthenticated)
                     {
-                        <li>@Html.ActionLink("Dashboard", "Index", "Home")</li>
-                        <li>@Html.ActionLink("Assuntos", "Index", "Assunto")</li>
-                        <li>@Html.ActionLink("Disciplinas", "Index", "Disciplina")</li>
-                        <li>@Html.ActionLink("Perfis", "Index", "RolesAdmin")</li>
-                        <li>@Html.ActionLink("Usuários", "Index", "UsersAdmin")</li>
+                        if (User.IsInRole("Admin"))
+                        {
+                            <li>@Html.ActionLink("Dashboard", "Index", "Dashboard")</li>
+                            <li>@Html.ActionLink("Assuntos", "Index", "Assunto")</li>
+                            <li>@Html.ActionLink("Disciplinas", "Index", "Disciplina")</li>
+                            <li>@Html.ActionLink("Testes", "Index", "Teste")</li>
+                            <li>@Html.ActionLink("Perfis", "Index", "RolesAdmin")</li>
+                            <li>@Html.ActionLink("Usuários", "Index", "UsersAdmin")</li>
+                        }
+
+                        if (User.IsInRole("Aluno"))
+                        {
+                            <li>@Html.ActionLink("Avaliações", "Index", "Avaliacao")</li>
+                        }
+
                     }
                     else
                     {
@@ -40,6 +50,39 @@
         </div>
     </div>
     <div class="container body-content">
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger">
+                @Html.ValidationSummary(false)
+            </div>
+        }
+        
+
+        @if (TempData["info"] != null)
+        {
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                @TempData["info"]
+            </div>
+        }
+
+        @if (TempData["warning"] != null)
+        {
+            <div class="alert alert-warning alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                @TempData["warning"]
+            </div>
+        }
+
+        @if (TempData["error"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                @TempData["error"]
+            </div>
+        }
+        
+
         @RenderBody()
         <hr />
         <footer>
@@ -54,6 +97,7 @@
     <script>
         $(document).ready(function () {
             $('.table_tacs').DataTable();
+            $('.date-filter').removeAttr("data-val-date");
         });
     </script>
 </body>

@@ -8,5 +8,9 @@ namespace Tacs.Domain.Models
 {
     public enum CriterioInicio
     {
+        Aleatório,
+        MaisFaceisPrimeiro,
+        MaisDificeisPrimeiro,
+        Media
     }
 }

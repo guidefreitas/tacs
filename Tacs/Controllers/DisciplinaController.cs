@@ -7,24 +7,34 @@ using Tacs.Domain.Models;
 using Tacs.Domain;
 using Tacs.ViewModels.Disciplina;
 using Tacs.Helpers;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity;
 
 namespace Tacs.Controllers
 {
     [Authorize(Roles = "Admin")]
     public class DisciplinaController : Controller
     {
+        TacsContext db;
+        UserStore<ApplicationUser> userStore;
+        UserManager<ApplicationUser> userManager;
+
+        public DisciplinaController()
+        {
+            db = new TacsContext();
+            userStore = new UserStore<ApplicationUser>(db);
+            userManager = new UserManager<ApplicationUser>(userStore);
+        }
+
         [HttpGet]
         public ActionResult Index()
         {
             VMIndexDisciplina vm = new VMIndexDisciplina();
-            using (var db = new TacsContext())
+            vm.Disciplinas = db.Disciplinas.Select(m => new VMDisciplina()
             {
-                vm.Disciplinas = db.Disciplinas.Select(m => new VMDisciplina()
-                {
-                    Id = m.Id,
-                    Nome = m.Nome
-                }).ToList();
-            }
+                Id = m.Id,
+                Nome = m.Nome
+            }).ToList();
 
             return View(vm);
         }
@@ -45,16 +55,14 @@ namespace Tacs.Controllers
             {
                 try
                 {
-                    using (var db = new TacsContext())
-                    {
-                        Disciplina disciplina = new Disciplina();
-                        disciplina.Nome = vm.Nome;
-                        db.Disciplinas.Add(disciplina);
-                        db.SaveChanges();
-                        this.FlashInfo("Disciplina cadastrada com sucesso");
-                        return this.RedirectToAction("Edit", new { id = disciplina.Id });
-                    }
-                }catch(Exception ex)
+                    Disciplina disciplina = new Disciplina();
+                    disciplina.Nome = vm.Nome;
+                    db.Disciplinas.Add(disciplina);
+                    db.SaveChanges();
+                    this.FlashInfo("Disciplina cadastrada com sucesso");
+                    return this.RedirectToAction("Edit", new { id = disciplina.Id });
+                }
+                catch(Exception ex)
                 {
                     ModelState.AddModelError("", ex.Message);
                 }
@@ -67,22 +75,19 @@ namespace Tacs.Controllers
         public ActionResult Edit(long id)
         {
             VMDisciplina vm = new VMDisciplina();
-            using (var db = new TacsContext())
+            Disciplina disciplina = db.Disciplinas.Find(id);
+            vm.Nome = disciplina.Nome;
+            vm.Id = disciplina.Id;
+            foreach (var aluno in disciplina.Alunos)
             {
-                Disciplina disciplina = db.Disciplinas.Find(id);
-                vm.Nome = disciplina.Nome;
-                vm.Id = disciplina.Id;
-                foreach(var aluno in disciplina.Alunos)
+                vm.Alunos.Add(new VMAluno()
                 {
-                    vm.Alunos.Add(new VMAluno()
-                    {
-                        Id = aluno.Id,
-                        Email = aluno.Email,
-                        Nome = aluno.UserName
-                    });
-                }
+                    Id = aluno.Id,
+                    Email = aluno.Email,
+                    Nome = aluno.UserName
+                });
             }
-                
+
             return View(vm);
         }
 
@@ -94,14 +99,11 @@ namespace Tacs.Controllers
             {
                 try
                 {
-                    using (var db = new TacsContext())
-                    {
-                        Disciplina disciplina = db.Disciplinas.Find(vm.Id);
-                        disciplina.Nome = vm.Nome;
-                        db.SaveChanges();
-                        this.FlashInfo("Disciplina atualizada com sucesso");
-                        return this.RedirectToAction("Index");
-                    }
+                    Disciplina disciplina = db.Disciplinas.Find(vm.Id);
+                    disciplina.Nome = vm.Nome;
+                    db.SaveChanges();
+                    this.FlashInfo("Disciplina atualizada com sucesso");
+                    return this.RedirectToAction("Index");
                 }
                 catch (Exception ex)
                 {
@@ -118,14 +120,11 @@ namespace Tacs.Controllers
         {
             try
             {
-                using (var db = new TacsContext())
-                {
-                    Disciplina disciplina = db.Disciplinas.Find(vm.Id);
-                    db.Disciplinas.Remove(disciplina);
-                    db.SaveChanges();
-                    this.FlashInfo("Disciplina removida com sucesso");
-                    return this.RedirectToAction("Index");
-                }
+                Disciplina disciplina = db.Disciplinas.Find(vm.Id);
+                db.Disciplinas.Remove(disciplina);
+                db.SaveChanges();
+                this.FlashInfo("Disciplina removida com sucesso");
+                return this.RedirectToAction("Index");
             }
             catch (Exception ex)
             {
@@ -140,18 +139,15 @@ namespace Tacs.Controllers
         {
             VMAddAluno vm = new VMAddAluno();
             vm.DisciplinaId = id;
-            using(var db = new TacsContext())
+            var alunos = db.Users.ToList().Where(u => userManager.IsInRole(u.Id, "Aluno"));
+            foreach (var aluno in alunos)
             {
-                var alunos = db.Users.Where(u => u.TipoUsuario == TipoUsuario.Aluno);
-                foreach(var aluno in alunos)
+                vm.Alunos.Add(new VMAluno()
                 {
-                    vm.Alunos.Add(new VMAluno()
-                    {
-                        Id = aluno.Id,
-                        Email = aluno.Email,
-                        Nome = aluno.UserName
-                    });
-                }
+                    Id = aluno.Id,
+                    Email = aluno.Email,
+                    Nome = aluno.UserName
+                });
             }
             return View(vm);
         }
@@ -165,28 +161,26 @@ namespace Tacs.Controllers
             {
                 try
                 {
-                    using (var db = new TacsContext())
+                    var disciplina = db.Disciplinas.Find(id);
+                    if (disciplina == null)
+                        return new HttpNotFoundResult();
+
+                    var aluno = db.Users.ToList().Where(u => userManager.IsInRole(u.Id, "Aluno") && u.Id == vm.AlunoId).FirstOrDefault();
+                    if (aluno == null)
+                        return new HttpNotFoundResult();
+
+                    if (disciplina.Alunos.Contains(aluno))
                     {
-                        var disciplina = db.Disciplinas.Find(id);
-                        if (disciplina == null)
-                            return new HttpNotFoundResult();
-
-                        var aluno = db.Users.Where(u => u.TipoUsuario == TipoUsuario.Aluno && u.Id == vm.AlunoId).FirstOrDefault();
-                        if (aluno == null)
-                            return new HttpNotFoundResult();
-
-                        if (disciplina.Alunos.Contains(aluno))
-                        {
-                            ModelState.AddModelError("AlunoId", "Aluno já adicionado nessa disciplina");
-                            return View(vm);
-                        }
-
-                        disciplina.Alunos.Add(aluno);
-                        db.SaveChanges();
-                        this.FlashInfo("Aluno adicionado com sucesso");
-                        return RedirectToAction("Edit", new { id = id });
+                        ModelState.AddModelError("AlunoId", "Aluno já adicionado nessa disciplina");
+                        return View(vm);
                     }
-                }catch(Exception ex)
+
+                    disciplina.Alunos.Add(aluno);
+                    db.SaveChanges();
+                    this.FlashInfo("Aluno adicionado com sucesso");
+                    return RedirectToAction("Edit", new { id = id });
+                }
+                catch(Exception ex)
                 {
                     ModelState.AddModelError("", ex.Message);
                 }
@@ -200,17 +194,14 @@ namespace Tacs.Controllers
         [HttpGet]
         public ActionResult DeleteAluno(long id, string alunoId)
         {
-            using (var db = new TacsContext())
-            {
-                var aluno = db.Users.Where(u => u.Id == alunoId).FirstOrDefault();
-                if (aluno == null)
-                    return new HttpNotFoundResult();
+            var aluno = db.Users.Where(u => u.Id == alunoId).FirstOrDefault();
+            if (aluno == null)
+                return new HttpNotFoundResult();
 
-                VMDeleteAluno vm = new VMDeleteAluno();
-                vm.AlunoId = aluno.Id;
-                vm.DisciplinaId = id;
-                return View(vm);
-            }
+            VMDeleteAluno vm = new VMDeleteAluno();
+            vm.AlunoId = aluno.Id;
+            vm.DisciplinaId = id;
+            return View(vm);
         }
 
 
@@ -222,22 +213,20 @@ namespace Tacs.Controllers
             {
                 try
                 {
-                    using (var db = new TacsContext())
-                    {
-                        var aluno = db.Users.Where(u => u.Id == vm.AlunoId).FirstOrDefault();
-                        if (aluno == null)
-                            return new HttpNotFoundResult();
+                    var aluno = db.Users.Where(u => u.Id == vm.AlunoId).FirstOrDefault();
+                    if (aluno == null)
+                        return new HttpNotFoundResult();
 
-                        var disciplina = db.Disciplinas.Where(u => u.Id == id).FirstOrDefault();
-                        if (disciplina == null)
-                            return new HttpNotFoundResult();
+                    var disciplina = db.Disciplinas.Where(u => u.Id == id).FirstOrDefault();
+                    if (disciplina == null)
+                        return new HttpNotFoundResult();
 
-                        disciplina.Alunos.Remove(aluno);
-                        db.SaveChanges();
-                        this.FlashInfo("Aluno removido com sucesso");
-                        return RedirectToAction("Edit", new { id = id });
-                    }
-                }catch(Exception ex)
+                    disciplina.Alunos.Remove(aluno);
+                    db.SaveChanges();
+                    this.FlashInfo("Aluno removido com sucesso");
+                    return RedirectToAction("Edit", new { id = id });
+                }
+                catch(Exception ex)
                 {
                     ModelState.AddModelError("", ex.Message);
                 }
