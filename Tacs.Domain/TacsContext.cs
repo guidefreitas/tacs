@@ -15,6 +15,7 @@ namespace Tacs.Domain
         public TacsContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
+            
         }
 
         public virtual DbSet<Alternativa> Alternativas { get; set; }

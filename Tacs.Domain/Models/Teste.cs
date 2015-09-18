@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Tacs.Domain.Models
 {
-    public class Teste : BaseModel
+    public class Teste : BaseModel, IValidatableObject
     {
         public virtual ICollection<Assunto> Assuntos { get; set; }
 
@@ -30,5 +30,14 @@ namespace Tacs.Domain.Models
         public CriterioEscolhaQuestao CriterioEscolhaQuestao { get; set; }
 
         public virtual ICollection<TesteItem> Itens { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if(this.CriterioEscolhaQuestao == CriterioEscolhaQuestao.Aleatoria 
+                && this.CriterioFinalizacao == CriterioFinalizacao.AoNivelarConhecimento)
+            {
+                yield return new ValidationResult("O teste não pode ter escolha aleatória e critério de finalização por nivelamento ao mesmo tempo", new[] { "CriterioEscolhaQuestao", "CriterioFinalizacao" });
+            }
+        }
     }
 }

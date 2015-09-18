@@ -7,11 +7,12 @@ using Tacs.Domain;
 using Tacs.Domain.Models;
 using Tacs.ViewModels.Teste;
 using Tacs.Helpers;
+using System.Data.Entity.Validation;
 
 namespace Tacs.Controllers
 {
     [Authorize(Roles = "Admin")]
-    public class TesteController : Controller
+    public class TesteController : BaseController
     {
         TacsContext db = new TacsContext();
 
@@ -109,6 +110,20 @@ namespace Tacs.Controllers
             vm.DataInicioValidade = model.DataInicioValidade;
             vm.DisciplinaId = model.Disciplina.Id;
 
+            foreach(var item in model.Itens)
+            {
+                var vmItem = new VMTesteItem();
+                vmItem.Id = item.Id;
+                vmItem.AlternativaId = item.Resposta.Id;
+                vmItem.Questao = item.Questao.Descricao;
+                vmItem.QuestaoId = item.Questao.Id;
+                vmItem.TesteId = item.Teste.Id;
+                vmItem.TempoResposta = item.TempoResposta;
+                vmItem.UsuarioNome = item.Usuario.UserName;
+                vm.Itens.Add(vmItem);
+            }
+
+            /*
             vm.Itens = model.Itens.Select(i => new VMTesteItem()
             {
                 Id = i.Id,
@@ -119,6 +134,8 @@ namespace Tacs.Controllers
                 TempoResposta = i.TempoResposta,
                 UsuarioNome = i.Usuario.UserName
             }).ToList();
+            */
+
 
             vm.Disciplinas = db.Disciplinas.Select(m => new VMDisciplina()
             {
@@ -163,6 +180,9 @@ namespace Tacs.Controllers
                     db.SaveChanges();
                     this.FlashInfo("Teste atualizado com sucesso");
                     return RedirectToAction("Index");
+                }catch(DbEntityValidationException dbEx)
+                {
+                    RegistraErros(dbEx);
                 }
                 catch (Exception ex)
                 {
@@ -206,8 +226,18 @@ namespace Tacs.Controllers
             if (model == null)
                 return HttpNotFound();
 
+            foreach(var assunto in model.Assuntos.ToList())
+            {
+                model.Assuntos.Remove(assunto);
+            }
+
+            foreach(var item in model.Itens.ToList())
+            {
+                db.TesteItens.Remove(item);
+            }
             db.Testes.Remove(model);
-            return this.Redirect("Index");
+            db.SaveChanges();
+            return this.RedirectToAction("Index");
         }
 
 

@@ -19,7 +19,7 @@ namespace Tacs.Domain.Models
         public virtual ApplicationUser Usuario { get; set; }
 
         [Required]
-        public Alternativa Resposta { get; set; }
+        public virtual Alternativa Resposta { get; set; }
         
         public TimeSpan? TempoResposta { get; set; }
     }

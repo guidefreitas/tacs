@@ -124,6 +124,15 @@ namespace Tacs.Controllers
                 using (var db = new TacsContext())
                 {
                     Assunto assunto = db.Assuntos.Find(vm.Id);
+                    foreach(var questao in assunto.Questoes.ToList())
+                    {
+                        foreach(var alt in questao.Alternativas.ToList())
+                        {
+                            db.Alternativas.Remove(alt);
+                        }
+
+                        db.Questoes.Remove(questao);
+                    }
                     db.Assuntos.Remove(assunto);
                     db.SaveChanges();
                     this.FlashInfo("Assunto removido com sucesso");

@@ -71,14 +71,40 @@ namespace Tacs.Controllers
             if (assunto == null)
                 return new HttpStatusCodeResult(500);
 
-            var questoesRespondidasIds = teste.Itens.Where(m => m.Teste.Id == teste.Id && m.Usuario.Id == user.Id).Select(a => a.Id).ToList();
+            var questoesRespondidasIds = teste.Itens.Where(m => m.Teste.Id == teste.Id && m.Usuario.Id == user.Id)
+                                                    .Select(a => a.Questao.Id).ToList();
+
+            if(teste.CriterioFinalizacao == CriterioFinalizacao.ParaNaQuestao30)
+            {
+                if (questoesRespondidasIds.Count >= 30)
+                {
+                    return RedirectToAction("Concluido");
+                }
+            }
+            
 
             if(teste.CriterioFinalizacao == Domain.Models.CriterioFinalizacao.ParaNaQuestao30 && questoesRespondidasIds.Count >= 30)
             {
                 return RedirectToAction("Concluido", new { id = teste.Id });
             }
 
-            var questao = assunto.Questoes.Where(m => !questoesRespondidasIds.Contains(m.Id)).FirstOrDefault();
+            Questao questao = null;
+            var questaoQuery = assunto.Questoes.Where(m => !questoesRespondidasIds.Contains(m.Id));
+
+            if(questaoQuery.Count() == 0)
+            {
+                return RedirectToAction("Concluido");
+            }
+
+            if (teste.CriterioEscolhaQuestao == CriterioEscolhaQuestao.Aleatoria)
+            {
+                questao = questaoQuery.OrderBy(r => Guid.NewGuid()).Take(1).FirstOrDefault();
+            }
+            else
+            {
+                questao = questaoQuery.FirstOrDefault();
+            }
+            
             VMQuestao vm = new VMQuestao();
             vm.Descricao = questao.Descricao;
             vm.DataInicioQuestao = DateTime.Now;

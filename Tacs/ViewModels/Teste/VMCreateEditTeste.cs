@@ -29,14 +29,14 @@ namespace Tacs.ViewModels.Teste
 
         [Required(ErrorMessage ="Informe a data de início")]
         [LocalizedDisplayName("TelaTesteDataInicioValidade")]
-        [DataType(DataType.DateTime)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy hh:mm}")]
+        [DataType(DataType.Text)]
+        //[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy hh:mm}")]
         public DateTime DataInicioValidade { get; set; }
 
         [Required(ErrorMessage = "Informe a data de término de validade")]
         [LocalizedDisplayName("TelaTesteDataFimValidade")]
-        [DataType(DataType.DateTime)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy hh:mm}")]
+        [DataType(DataType.Text)]
+        //[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy hh:mm}")]
         public DateTime DataFimValidade { get; set; }
 
         [Required(ErrorMessage = "Informe o critério de início do teste")]

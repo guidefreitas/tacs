@@ -115,6 +115,10 @@ namespace Tacs.Controllers
             try
             {
                 Questao questao = db.Questoes.Find(id);
+                foreach(var alt in questao.Alternativas.ToList())
+                {
+                    db.Alternativas.Remove(alt);
+                }
                 db.Questoes.Remove(questao);
                 db.SaveChanges();
                 this.FlashInfo("Questão removida com sucesso");
